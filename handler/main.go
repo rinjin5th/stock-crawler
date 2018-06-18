@@ -59,7 +59,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       doc.Find("span.fxx01").Get(1).Attr[0].Val,
+		Body:       doc.Find("span.fxx01").Get(2).Data
 		Headers: map[string]string{
 			"Content-Type": "text/html",
 		},
