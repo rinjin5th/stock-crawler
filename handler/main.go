@@ -1,13 +1,13 @@
 package main
 
 import (
-	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/PuerkitoBio/goquery"
 )
 
 const (
@@ -50,13 +50,16 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
-    }
-
-	b, _ := ioutil.ReadAll(resp.Body)
+	}
+	
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+	    return events.APIGatewayProxyResponse{}, err
+	}
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string(b),
+		Body:       doc.Get(1).Data,
 		Headers: map[string]string{
 			"Content-Type": "text/html",
 		},

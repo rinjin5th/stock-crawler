@@ -2,6 +2,18 @@
 
 
 [[projects]]
+  name = "github.com/PuerkitoBio/goquery"
+  packages = ["."]
+  revision = "dc2ec5c7ca4d9aae063b79b9f581dd3ea6afd2b2"
+  version = "v1.4.1"
+
+[[projects]]
+  name = "github.com/andybalholm/cascadia"
+  packages = ["."]
+  revision = "901648c87902174f774fac311d7f176f8647bdaa"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/aws/aws-lambda-go"
   packages = [
     "events",
@@ -30,9 +42,18 @@
   revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
   version = "v1.2.2"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = [
+    "html",
+    "html/atom"
+  ]
+  revision = "db08ff08e8622530d9ed3a0e8ac279f6d4c02196"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "04422d1b343163707367036cbef4cfb50cac54fd1cc5d805cda7b0fbeaf93268"
+  inputs-digest = "20b31d5cc263a1060f4a3767832080c71f6fc57f1bad30d72f4cd3b49ae38775"
   solver-name = "gps-cdcl"
   solver-version = 1
