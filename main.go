@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	"net/http/cookiejar"
 	"net/url"
 	"strings"
 
@@ -23,15 +22,6 @@ const (
 // Handler is executed by AWS Lambda in the main function. Once the request
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-
-	jar, err := cookiejar.New(nil)
-    if err != nil {
-        return events.APIGatewayProxyResponse{}, err
-    }
-
-    client := &http.Client{
-        Jar: jar,
-	}
 	
 	values := url.Values{}
 	values.Set("_ControlID", "WPLETsiR001Control")
@@ -52,7 +42,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	values.Set("qr_suggest", "1")
 	values.Set("qr_sort", "1")
 
-	resp, err := client.PostForm(sbiURL, values)
+	resp, err := http.PostForm(sbiURL, values)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
