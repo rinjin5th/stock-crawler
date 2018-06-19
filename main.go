@@ -12,12 +12,12 @@ import (
 )
 
 const (
-	sbiUrl = "https://www.sbisec.co.jp/ETGate"
+	sbiURL = "https://www.sbisec.co.jp/ETGate"
 )
 
 const (
-	CompanyName = iota
-	Price
+	companyName = iota
+	price
 )
 
 // Handler is executed by AWS Lambda in the main function. Once the request
@@ -52,7 +52,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	values.Set("qr_suggest", "1")
 	values.Set("qr_sort", "1")
 
-	resp, err := client.PostForm(sbiUrl, values)
+	resp, err := client.PostForm(sbiURL, values)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
@@ -66,7 +66,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	var stockPrice string
 	doc.Find("span.fxx01").Each(func(i int, s *goquery.Selection) {
 		switch i {
-			case Price: 
+			case companyName:
+				// nop
+			case price: 
 				stockPrice = strings.Replace(s.Text(), ",", "", -1)
 		}
 	})
