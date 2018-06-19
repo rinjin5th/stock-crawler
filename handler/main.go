@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -66,7 +67,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	doc.Find("span.fxx01").Each(func(i int, s *goquery.Selection) {
 		switch i {
 			case Price: 
-				stockPrice = s.Text()
+				stockPrice = strings.Replace(s.Text(), ",", "", -1)
 		}
 	})
 
