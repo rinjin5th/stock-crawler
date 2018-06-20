@@ -9,9 +9,9 @@ import (
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	crw := Crawler{Code: "2654"}
+	targetStocks := AllCrawlingTarget()
 
-	price, err := crw.ScrapePrice()
+	err := UpdatePrice(targetStocks)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err
@@ -19,7 +19,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       price,
+		Body:       "OK",
 		Headers: map[string]string{
 			"Content-Type": "text/html",
 		},
