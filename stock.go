@@ -32,7 +32,9 @@ func AllCrawlingTarget() ([]Stock) {
 func UpdatePrice(stocks []Stock) error {
 	fmt.Println("START UpdatePrice")
 	wg := new(sync.WaitGroup)
+	fmt.Println("After create wg")
 	errCodeCh := make(chan string)
+	fmt.Println("After create ch")
 	for _, stock := range stocks {
 		fmt.Println("START Loop")
 		wg.Add(1)
