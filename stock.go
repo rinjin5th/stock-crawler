@@ -34,6 +34,7 @@ func UpdatePrice(stocks []Stock) error {
 	wg := new(sync.WaitGroup)
 	errCodeCh := make(chan string)
 	for _, stock := range stocks {
+		fmt.Println("START Loop")
 		wg.Add(1)
 		go func(target Stock) {
 			defer wg.Done()
@@ -58,6 +59,7 @@ func UpdatePrice(stocks []Stock) error {
 			}
 			fmt.Println("end goroutine")
 		}(stock)
+		fmt.Println("END Loop")
 	}
 	errCodes := []string{}
 	for code := range errCodeCh {
