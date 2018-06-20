@@ -33,6 +33,7 @@ Resources:
           Properties:
             Path: /
             Method: get
+      Timeout: 10
   Stock:
     Type: AWS::DynamoDB::Table
     Properties:
