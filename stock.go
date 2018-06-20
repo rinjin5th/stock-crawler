@@ -19,29 +19,31 @@ type Stock struct {
 
 // AllCrawlingTarget gets crawling target from DynamoDB
 func AllCrawlingTarget() ([]Stock) {
-	fmt.Print("START AllCrawlingTarget")
+	fmt.Println("START AllCrawlingTarget")
 	tbl := NewTable(tableName)
 	var stocks []Stock
 	tbl.Scan().All(&stocks)
-	fmt.Print("END AllCrawlingTarget")
+	fmt.Println("END AllCrawlingTarget")
 
 	return stocks
 }
 
 // UpdatePrice update to the latest price
 func UpdatePrice(stocks []Stock) error {
-	fmt.Print("START UpdatePrice")
+	fmt.Println("START UpdatePrice")
 	wg := new(sync.WaitGroup)
 	errCodeCh := make(chan string)
 	for _, stock := range stocks {
 		wg.Add(1)
 		go func(target Stock) {
 			defer wg.Done()
+			fmt.Println("START goroutine")
 			crw := Crawler{Code: target.Code}
 			
 			price, err := crw.ScrapePrice()
 		
 			if err != nil {
+				fmt.Println(err.Error())
 				errCodeCh <- target.Code
 				return
 			}
@@ -50,9 +52,11 @@ func UpdatePrice(stocks []Stock) error {
 			err = tbl.Update("code", target.Code).Set("price", price).Run()
 
 			if err != nil {
+				fmt.Println(err.Error())
 				errCodeCh <- target.Code
 				return
 			}
+			fmt.Println("end goroutine")
 		}(stock)
 	}
 	errCodes := []string{}
@@ -64,7 +68,7 @@ func UpdatePrice(stocks []Stock) error {
 	if len(errCodes) != 0 {
 		return errors.New("Can not update stock price")
 	}
-	fmt.Print("END UpdatePrice")
+	fmt.Println("END UpdatePrice")
 
 	return nil
 }
