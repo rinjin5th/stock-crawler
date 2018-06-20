@@ -3,6 +3,7 @@ package main
 import (
 	"sync"
 	"errors"
+	"fmt"
 )
 
 const (
@@ -18,15 +19,18 @@ type Stock struct {
 
 // AllCrawlingTarget gets crawling target from DynamoDB
 func AllCrawlingTarget() ([]Stock) {
+	fmt.Print("START AllCrawlingTarget")
 	tbl := NewTable(tableName)
 	var stocks []Stock
 	tbl.Scan().All(&stocks)
+	fmt.Print("END AllCrawlingTarget")
 
 	return stocks
 }
 
 // UpdatePrice update to the latest price
 func UpdatePrice(stocks []Stock) error {
+	fmt.Print("START UpdatePrice")
 	wg := new(sync.WaitGroup)
 	errCodeCh := make(chan string)
 	for _, stock := range stocks {
@@ -60,6 +64,7 @@ func UpdatePrice(stocks []Stock) error {
 	if len(errCodes) != 0 {
 		return errors.New("Can not update stock price")
 	}
+	fmt.Print("END UpdatePrice")
 
 	return nil
 }
