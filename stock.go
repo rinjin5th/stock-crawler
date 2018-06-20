@@ -23,6 +23,9 @@ func AllCrawlingTarget() ([]Stock) {
 	tbl := NewTable(tableName)
 	var stocks []Stock
 	tbl.Scan().All(&stocks)
+
+	fmt.Println(len(stocks))
+
 	fmt.Println("END AllCrawlingTarget")
 
 	return stocks
