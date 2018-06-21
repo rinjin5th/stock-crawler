@@ -56,6 +56,10 @@ func UpdatePrice(stocks []Stock) error {
 				return
 			}
 
+			if target.Price == price {
+				return
+			}
+
 			tbl := NewTable(tableName)
 			err = tbl.Update("code", target.Code).Set("price", price).Run()
 
