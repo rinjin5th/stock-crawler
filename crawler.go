@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -25,9 +26,9 @@ type Crawler struct {
 }
 
 // ScrapePrice gets stock price from sbi
-func (crw Crawler) ScrapePrice() (string, error) {
+func (crw Crawler) ScrapePrice() (int, error) {
 	if len(crw.Code) == 0 {
-		return "", errors.New("Must set stock code")
+		return -1, errors.New("Must set stock code")
 	}
 
 	resp, err := http.PostForm(sbiURL, newParams(crw.Code))
@@ -36,23 +37,27 @@ func (crw Crawler) ScrapePrice() (string, error) {
 	}
 
 	if err != nil {
-		return "", errors.New("Can not crawl to sbi")
+		return -1, errors.New("Can not crawl to sbi")
 	}
 
 	doc, _ := goquery.NewDocumentFromReader(resp.Body)
 
-	var priceVal string
+	priceVal := -1
 	doc.Find("span.fxx01").Each(func(i int, s *goquery.Selection) {
 		switch i {
 		case companyName:
 			// nop
 		case price:
-			priceVal = strings.Replace(s.Text(), ",", "", -1)
+			priceVal, err = strconv.Atoi(strings.Replace(s.Text(), ",", "", -1))
 		}
 	})
 
-	if len(priceVal) == 0 {
-		return "", errors.New("Can not scrape price")
+	if err != nil {
+		return -1, errors.New("Illegal price value")
+	}
+
+	if priceVal < 0 {
+		return -1, errors.New("Can not scrape price")
 	}
 	
 	return priceVal, nil
