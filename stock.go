@@ -49,6 +49,7 @@ func UpdatePrice(stocks []Stock) error {
 		fmt.Println("START Loop")
 		wg.Add(1)
 		go func(target Stock) {
+			defer fmt.Println("WaitGroup.Done")
 			defer wg.Done()
 			fmt.Println("START goroutine")
 			crw := Crawler{Code: target.Code}
