@@ -8,18 +8,8 @@ Parameters:
     Type: String
     Description: stock crawler
 
-# Enable blue/green deployments using this Globals section. For instructions, see the AWS CodeStar User Guide:
-# https://docs.aws.amazon.com/codestar/latest/userguide/how-to-modify-serverless-project.html?icmpid=docs_acs_rm_tr
-#
-# Globals:
-#   Function:
-#     AutoPublishAlias: live
-#     DeploymentPreference:
-#       Enabled: true
-#       Type: Canary10Percent5Minutes
-
 Resources:
-  GetHelloWorld:
+  StockCrawler:
     Type: AWS::Serverless::Function
     Properties:
       Handler: main
@@ -28,11 +18,10 @@ Resources:
         Fn::ImportValue:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
       Events:
-        GetEvent:
-          Type: Api
+        ScheduleEvent:
+          Type: Schedule
           Properties:
-            Path: /
-            Method: get
+            Schedule: cron(0/5 0-6 ? * MON-FRI *)
       Timeout: 60
   Stock:
     Type: AWS::DynamoDB::Table
