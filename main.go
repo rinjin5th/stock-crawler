@@ -9,9 +9,13 @@ import (
 // is processed, it returns an Amazon API Gateway response object to AWS Lambda
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	targetStocks := AllCrawlingTarget()
+	targetStocks, err := AllCrawlingTarget()
 
-	err := UpdatePrice(targetStocks)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, err
+	}
+
+	err = UpdatePrice(targetStocks)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, err

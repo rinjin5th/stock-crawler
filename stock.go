@@ -18,7 +18,7 @@ type Stock struct {
 }
 
 // AllCrawlingTarget gets crawling target from DynamoDB
-func AllCrawlingTarget() ([]Stock) {
+func AllCrawlingTarget() ([]Stock, error)  {
 	fmt.Println("START AllCrawlingTarget")
 	tbl := NewTable(tableName)
 	var stocks []Stock
@@ -28,7 +28,11 @@ func AllCrawlingTarget() ([]Stock) {
 
 	fmt.Println("END AllCrawlingTarget")
 
-	return stocks
+	if len(stocks) == 0 {
+		return nil, errors.New("Not found targets")
+	}
+
+	return stocks, nil
 }
 
 // UpdatePrice update to the latest price
