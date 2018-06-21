@@ -20,6 +20,7 @@ type Stock struct {
 // AllCrawlingTarget gets crawling target from DynamoDB
 func AllCrawlingTarget() ([]Stock, error)  {
 	fmt.Println("START AllCrawlingTarget")
+	defer fmt.Println("END AllCrawlingTarget")
 	tbl := NewTable(tableName)
 	var stocks []Stock
 	err := tbl.Scan().All(&stocks)
@@ -27,9 +28,6 @@ func AllCrawlingTarget() ([]Stock, error)  {
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(len(stocks))
-	fmt.Println("END AllCrawlingTarget")
 
 	if len(stocks) == 0 {
 		return nil, errors.New("Not found targets")
@@ -41,16 +39,13 @@ func AllCrawlingTarget() ([]Stock, error)  {
 // UpdatePrice update to the latest price
 func UpdatePrice(stocks []Stock) error {
 	fmt.Println("START UpdatePrice")
+	defer fmt.Println("END UpdatePrice")
 	wg := new(sync.WaitGroup)
-	fmt.Println("After create wg")
 	errCodes := []string{}
 	for _, stock := range stocks {
-		fmt.Println("START Loop")
 		wg.Add(1)
 		go func(target Stock) {
-			defer fmt.Println("WaitGroup.Done")
 			defer wg.Done()
-			fmt.Println("START goroutine")
 			crw := Crawler{Code: target.Code}
 			
 			price, err := crw.ScrapePrice()
@@ -69,16 +64,13 @@ func UpdatePrice(stocks []Stock) error {
 				errCodes = append(errCodes, target.Code)
 				return
 			}
-			fmt.Println("end goroutine")
 		}(stock)
-		fmt.Println("END Loop")
 	}
 	wg.Wait()
 
 	if len(errCodes) != 0 {
 		return errors.New("Can not update stock price")
 	}
-	fmt.Println("END UpdatePrice")
 
 	return nil
 }
