@@ -43,8 +43,7 @@ func UpdatePrice(stocks []Stock) error {
 	fmt.Println("START UpdatePrice")
 	wg := new(sync.WaitGroup)
 	fmt.Println("After create wg")
-	errCodeCh := make(chan string)
-	fmt.Println("After create ch")
+	errCodes := []string{}
 	for _, stock := range stocks {
 		fmt.Println("START Loop")
 		wg.Add(1)
@@ -58,7 +57,7 @@ func UpdatePrice(stocks []Stock) error {
 		
 			if err != nil {
 				fmt.Println(err.Error())
-				errCodeCh <- target.Code
+				errCodes = append(errCodes, target.Code)
 				return
 			}
 
@@ -67,16 +66,12 @@ func UpdatePrice(stocks []Stock) error {
 
 			if err != nil {
 				fmt.Println(err.Error())
-				errCodeCh <- target.Code
+				errCodes = append(errCodes, target.Code)
 				return
 			}
 			fmt.Println("end goroutine")
 		}(stock)
 		fmt.Println("END Loop")
-	}
-	errCodes := []string{}
-	for code := range errCodeCh {
-		errCodes = append(errCodes, code)
 	}
 	wg.Wait()
 
