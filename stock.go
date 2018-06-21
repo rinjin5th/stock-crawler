@@ -22,10 +22,13 @@ func AllCrawlingTarget() ([]Stock, error)  {
 	fmt.Println("START AllCrawlingTarget")
 	tbl := NewTable(tableName)
 	var stocks []Stock
-	tbl.Scan().All(&stocks)
+	err := tbl.Scan().All(&stocks)
+
+	if err != nil {
+		return nil, err
+	}
 
 	fmt.Println(len(stocks))
-
 	fmt.Println("END AllCrawlingTarget")
 
 	if len(stocks) == 0 {
