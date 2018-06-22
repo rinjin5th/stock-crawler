@@ -4,14 +4,15 @@ import (
 	"errors"
 	"net/http"
 	"net/url"
-	"strings"
 	"strconv"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
 const (
-	sbiURL = "https://www.sbisec.co.jp/ETGate"
+	sbiURL  = "https://www.sbisec.co.jp/ETGate"
+	noPrice = "--"
 )
 
 const (
@@ -48,18 +49,20 @@ func (crw Crawler) ScrapePrice() (int, error) {
 		case companyName:
 			// nop
 		case price:
-			priceVal, err = strconv.Atoi(strings.Replace(s.Text(), ",", "", -1))
+			if noPrice != s.Text() {
+				priceVal, err = strconv.Atoi(strings.Replace(s.Text(), ",", "", -1))
+			}
 		}
 	})
 
 	if err != nil {
-		return -1, errors.New("Illegal price value")
+		return -1, err
 	}
 
 	if priceVal < 0 {
 		return -1, errors.New("Can not scrape price")
 	}
-	
+
 	return priceVal, nil
 }
 
