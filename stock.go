@@ -48,7 +48,7 @@ func UpdatePrice(stocks []Stock) error {
 			defer wg.Done()
 			crw := Crawler{Code: target.Code}
 			
-			price, err := crw.ScrapePrice()
+			price, isNoPrice, err := crw.ScrapePrice()
 		
 			if err != nil {
 				fmt.Println(err.Error())
@@ -56,7 +56,7 @@ func UpdatePrice(stocks []Stock) error {
 				return
 			}
 
-			if target.Price == price {
+			if isNoPrice || target.Price == price {
 				return
 			}
 

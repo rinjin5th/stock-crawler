@@ -27,9 +27,12 @@ type Crawler struct {
 }
 
 // ScrapePrice gets stock price from sbi
-func (crw Crawler) ScrapePrice() (int, error) {
+func (crw Crawler) ScrapePrice() (int, bool, error) {
+	
+	var isNoPrice bool
+	
 	if len(crw.Code) == 0 {
-		return -1, errors.New("Must set stock code")
+		return -1, isNoPrice, errors.New("Must set stock code")
 	}
 
 	resp, err := http.PostForm(sbiURL, newParams(crw.Code))
@@ -38,7 +41,7 @@ func (crw Crawler) ScrapePrice() (int, error) {
 	}
 
 	if err != nil {
-		return -1, errors.New("Can not crawl to sbi")
+		return -1, isNoPrice, errors.New("Can not crawl to sbi")
 	}
 
 	doc, _ := goquery.NewDocumentFromReader(resp.Body)
@@ -49,21 +52,23 @@ func (crw Crawler) ScrapePrice() (int, error) {
 		case companyName:
 			// nop
 		case price:
-			if noPrice != s.Text() {
+			if noPrice == s.Text() {
+				isNoPrice = true
+			} else {
 				priceVal, err = strconv.Atoi(strings.Replace(s.Text(), ",", "", -1))
 			}
 		}
 	})
 
 	if err != nil {
-		return -1, err
+		return -1, isNoPrice, err
 	}
 
-	if priceVal < 0 {
-		return -1, errors.New("Can not scrape price")
+	if !isNoPrice && priceVal < 0 {
+		return -1, isNoPrice, errors.New("Can not scrape price")
 	}
 
-	return priceVal, nil
+	return priceVal, isNoPrice, nil
 }
 
 func newParams(code string) url.Values {
