@@ -61,9 +61,9 @@ func UpdatePrice(stocks []Stock) error {
 				fmt.Sprintf("No update %s", target.Code)
 				return
 			}
-
+			fmt.Println("checkpoint1")
 			alert(target, price)
-
+			fmt.Println("checkpoint2")
 			tbl := NewTable(tableName)
 			err = tbl.Update("code", target.Code).Set("price", price).Run()
 
@@ -86,8 +86,8 @@ func UpdatePrice(stocks []Stock) error {
 func alert(stock Stock, scarapedPrice int) (){
 	fmt.Println("START alert")
 	defer fmt.Println("END alert")
-	fmt.Sprintf("debug:%+v\n", stock)
-	fmt.Sprintf("debug: scrapedPrice -> %s", scarapedPrice)
+	fmt.Printf("debug:%+v\n", stock)
+	fmt.Printf("debug: scrapedPrice -> %s", scarapedPrice)
 	
 	if stock.Price == 0 || stock.Price == scarapedPrice {
 		return
