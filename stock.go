@@ -83,6 +83,10 @@ func UpdatePrice(stocks []Stock) error {
 }
 
 func alert(stock Stock, scarapedPrice int) (){
+	
+	fmt.Sprintf("debug:%+v\n", stock)
+	fmt.Sprintf("debug: scrapedPrice -> %s", scarapedPrice)
+	
 	if stock.Price == 0 || stock.Price == scarapedPrice {
 		return
 	}
