@@ -84,15 +84,13 @@ func UpdatePrice(stocks []Stock) error {
 func alert(stock Stock, scrapedPrice int) (){
 	fmt.Println("START alert")
 	defer fmt.Println("END alert")
-	fmt.Printf("debug:%+v\n", stock)
-	fmt.Printf("debug: scrapedPrice -> %d", scrapedPrice)
 	
 	if stock.Price == 0 || stock.Price == scrapedPrice {
 		return
 	}
 	diff := scrapedPrice - stock.PurchasePrice
 
-	fmt.Printf("debug: diff -> %d", diff)
+	fmt.Printf("diff -> %d", diff)
 
 	if diff <= LowerLimit {
 		slack := NewSlack(fmt.Sprintf("<!here>\n%s is bad price.", stock.Code))

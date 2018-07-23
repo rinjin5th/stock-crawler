@@ -21,7 +21,7 @@ Resources:
         ScheduleEvent:
           Type: Schedule
           Properties:
-            Schedule: cron(0/5 0-8 ? * MON-FRI *)
+            Schedule: cron(0/5 0-6 ? * MON-FRI *)
       Timeout: 60
   Stock:
     Type: AWS::DynamoDB::Table

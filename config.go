@@ -9,6 +9,8 @@ var (
 	AwsAccessKey = os.Getenv("ACCESS_KEY")
 	// AwsSecretKey is AWS_SECRET_KEY in environment variable
 	AwsSecretKey = os.Getenv("SECRET_KEY")
+	// SlackWebHookURL is alert send destination
+	SlackWebHookURL = os.Getenv("SLACK_WEB_HOOK_URL")
 )
 
 const (
@@ -18,6 +20,4 @@ const (
 	LowerLimit = -9
 	// UpperLimit is threshold to trigger an notify
 	UpperLimit = 6
-	// SlackWebHookURL is alert send destination
-	SlackWebHookURL = "https://hooks.slack.com/services/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"
 )

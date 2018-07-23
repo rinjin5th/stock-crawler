@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/url"
 	"fmt"
-	"io/ioutil"
 )
 
 // Slack is used for send IncomingWebHook request
@@ -22,7 +21,7 @@ func NewSlack(text string) *Slack {
 
 // Send is used for send IncomingWebHook request
 func (slack Slack) Send(webHookURL string) (error) {
-	resp, err := http.PostForm(
+	_, err := http.PostForm(
         webHookURL,
         url.Values{"payload": {slack.json()}},
 	)
@@ -30,11 +29,6 @@ func (slack Slack) Send(webHookURL string) (error) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-
-	body, _ := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
-	
-	fmt.Println(string(body))
 	
 	return err
 }
