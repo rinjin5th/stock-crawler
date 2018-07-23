@@ -39,7 +39,7 @@ func AllCrawlingTarget() ([]Stock, error)  {
 
 // UpdatePrice update to the latest price
 func UpdatePrice(stocks []Stock) error {
-	fmt.Println("START UpdatePrice")
+	fmt.Println("START UpdatePriceXXX")
 	defer fmt.Println("END UpdatePrice")
 	wg := new(sync.WaitGroup)
 	errCodes := []string{}
@@ -84,6 +84,8 @@ func UpdatePrice(stocks []Stock) error {
 }
 
 func alert(stock Stock, scarapedPrice int) (){
+	fmt.Println("START alert")
+	defer fmt.Println("END alert")
 	fmt.Sprintf("debug:%+v\n", stock)
 	fmt.Sprintf("debug: scrapedPrice -> %s", scarapedPrice)
 	
