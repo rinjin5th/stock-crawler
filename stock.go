@@ -58,6 +58,7 @@ func UpdatePrice(stocks []Stock) error {
 			}
 
 			if isNoPrice || target.Price == price {
+				fmt.Sprintf("No update %s", target.Code)
 				return
 			}
 
@@ -83,7 +84,6 @@ func UpdatePrice(stocks []Stock) error {
 }
 
 func alert(stock Stock, scarapedPrice int) (){
-	
 	fmt.Sprintf("debug:%+v\n", stock)
 	fmt.Sprintf("debug: scrapedPrice -> %s", scarapedPrice)
 	
