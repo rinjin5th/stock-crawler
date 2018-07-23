@@ -15,6 +15,7 @@ type Stock struct {
 	Code  string `dynamo:"code"`
 	CompanyName string `dynamo:"company_name"`
 	Price int `dynamo:"price"`
+	PurchasePrice int `dynamo:"purchase_price"`
 }
 
 // AllCrawlingTarget gets crawling target from DynamoDB
@@ -77,4 +78,19 @@ func UpdatePrice(stocks []Stock) error {
 	}
 
 	return nil
+}
+
+func alert(stock Stock, scarapedPrice int) (){
+	if stock.Price == 0 || stock.Price == scarapedPrice {
+		return
+	}
+	diff := stock.PurchasePrice - scarapedPrice
+
+	if diff <= LowerLimit {
+		slack := NewSlack(fmt.Sprintf("%sは損切りしたほうがよいです"))
+		slack.Send(SlackWebHookURL)
+	} else if diff >= UpperLimit {
+		slack := NewSlack(fmt.Sprintf("%sは利確したほうがよいです"))
+		slack.Send(SlackWebHookURL)
+	}
 }
