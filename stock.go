@@ -64,6 +64,8 @@ func UpdatePrice(stocks []Stock) error {
 			tbl := NewTable(tableName)
 			err = tbl.Update("code", target.Code).Set("price", price).Run()
 
+			alert(target, price)
+
 			if err != nil {
 				fmt.Println(err.Error())
 				errCodes = append(errCodes, target.Code)
