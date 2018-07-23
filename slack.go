@@ -10,7 +10,7 @@ import (
 
 // Slack is used for send IncomingWebHook request
 type Slack struct {
-	Text string
+	Text string `json:"text"`
 }
 
 // NewSlack creates slack object
