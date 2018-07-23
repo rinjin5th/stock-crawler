@@ -61,9 +61,7 @@ func UpdatePrice(stocks []Stock) error {
 				fmt.Sprintf("No update %s", target.Code)
 				return
 			}
-			fmt.Println("checkpoint1")
 			alert(target, price)
-			fmt.Println("checkpoint2")
 			tbl := NewTable(tableName)
 			err = tbl.Update("code", target.Code).Set("price", price).Run()
 
@@ -83,16 +81,18 @@ func UpdatePrice(stocks []Stock) error {
 	return nil
 }
 
-func alert(stock Stock, scarapedPrice int) (){
+func alert(stock Stock, scrapedPrice int) (){
 	fmt.Println("START alert")
 	defer fmt.Println("END alert")
 	fmt.Printf("debug:%+v\n", stock)
-	fmt.Printf("debug: scrapedPrice -> %s", scarapedPrice)
+	fmt.Printf("debug: scrapedPrice -> %d", scrapedPrice)
 	
-	if stock.Price == 0 || stock.Price == scarapedPrice {
+	if stock.Price == 0 || stock.Price == scrapedPrice {
 		return
 	}
-	diff := stock.PurchasePrice - scarapedPrice
+	diff := stock.PurchasePrice - scrapedPrice
+
+	fmt.Printf("debug: diff -> %d", diff)
 
 	if diff <= LowerLimit {
 		slack := NewSlack(fmt.Sprintf("%sは損切りしたほうがよいです"))
