@@ -95,10 +95,10 @@ func alert(stock Stock, scrapedPrice int) (){
 	fmt.Printf("debug: diff -> %d", diff)
 
 	if diff <= LowerLimit {
-		slack := NewSlack(fmt.Sprintf("@here\n%sは損切りしたほうがよいです", stock.Code))
+		slack := NewSlack(fmt.Sprintf("<!here>\n%sは損切りしたほうがよいです", stock.Code))
 		slack.Send(SlackWebHookURL)
 	} else if diff >= UpperLimit {
-		slack := NewSlack(fmt.Sprintf("@here\n%sは利確したほうがよいです", stock.Code))
+		slack := NewSlack(fmt.Sprintf("<!here>\n%sは利確したほうがよいです", stock.Code))
 		slack.Send(SlackWebHookURL)
 	}
 }
