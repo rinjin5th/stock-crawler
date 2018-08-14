@@ -36,3 +36,16 @@ Resources:
         ReadCapacityUnits: 3
         WriteCapacityUnits: 1
       TableName: stock
+  State:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: key
+          AttributeType: S
+      KeySchema:
+        - AttributeName: key
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      TableName: stock
