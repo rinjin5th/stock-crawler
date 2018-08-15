@@ -41,7 +41,7 @@ Resources:
     Properties:
       AttributeDefinitions:
         - AttributeName: key
-          AttributeType: S
+          AttributeType: N
       KeySchema:
         - AttributeName: key
           KeyType: HASH
