@@ -58,7 +58,7 @@ func UpdatePrice(stocks []Stock) error {
 			}
 
 			if isNoPrice || target.Price == price {
-				fmt.Sprintf("No update %s", target.Code)
+				fmt.Printf("No update %s", target.Code)
 				return
 			}
 			alert(target, price)
